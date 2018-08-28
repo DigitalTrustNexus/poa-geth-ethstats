@@ -12,7 +12,7 @@ shift
 ip_addr=$1
 shift
 
-genesis=empty-genesis.json
+genesis=genesis.json
 
 GETH=`which geth`
 

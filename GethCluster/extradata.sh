@@ -9,8 +9,8 @@ for ((i=0;i<N;++i)); do
     adr=$(jq '.address' clusters/3301/data/$id/keystore/UTC--*)
     adr=`echo $adr | sed 's/.\(.*\)/\1/' | sed 's/\(.*\)./\1/'`
 
-    cat empty-genesis.json | jq --arg adr "$adr"  '.alloc[$adr].balance="0x200000000000000000000000000000000000000000000000000000000000000"' &> genesis2.json
-    cat genesis2.json &> empty-genesis.json
+    cat genesis.json | jq --arg adr "$adr"  '.alloc[$adr].balance="0x200000000000000000000000000000000000000000000000000000000000000"' &> genesis2.json
+    cat genesis2.json &> genesis.json
 
     extraData=$extraData$adr
 done
@@ -18,7 +18,7 @@ done
 extraData='0x0000000000000000000000000000000000000000000000000000000000000000'$extraData'0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
 
 
-cat empty-genesis.json | jq --arg extraData "$extraData" '.extraData=$extraData' &> genesis2.json
-cat genesis2.json &> empty-genesis.json
+cat genesis.json | jq --arg extraData "$extraData" '.extraData=$extraData' &> genesis2.json
+cat genesis2.json &> genesis.json
 
 sleep 5
