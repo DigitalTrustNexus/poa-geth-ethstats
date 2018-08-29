@@ -1,6 +1,19 @@
 #!/bin/bash
-echo '
-{
+
+pm2 delete ../eth-net-intelligence-api/app.json
+if [ -d "clusters/" ]; then
+    rm -rf clusters/
+fi
+if [ -f "password00" ]; then
+    rm password0*
+fi
+if [ -f "genesis2.json" ]; then
+    rm genesis2.json
+fi
+if [ -f "genesis.json" ]; then
+    rm genesis.json
+fi
+echo '{
     "config": {
         "chainId": 1515,
         "homesteadBlock": 1,
@@ -26,8 +39,5 @@ echo '
     "number": "0x0",
     "gasUsed": "0x0",
     "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000"
- }' > genesis.json
-rm -rf clusters/
-rm password0*
-rm genesis2.json
+ }' &> genesis.json
 GETH=/usr/bin/geth bash ./gethcluster.sh ./clusters 3301 $1 127.0.0.1 -mine

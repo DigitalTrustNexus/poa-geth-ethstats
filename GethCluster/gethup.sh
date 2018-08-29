@@ -1,8 +1,5 @@
 #!/bin/bash
 
-
-
-
 root=$1
 shift
 dd=$1
@@ -15,7 +12,6 @@ Nbr=$1
 shift
 
 GETH=`which geth`
-
 datetag=`date "+%c%y%m%d-%H%M%S"|cut -d ' ' -f 5`
 datadir=$root/data/$dd
 log=$root/log/$dd.$datetag.log
@@ -34,25 +30,3 @@ if [ ! -d "$root/keystore/$dd" ]; then
   echo "Account created"
   cp -R "$datadir/keystore" $root/keystore/$dd
 fi
-
-./extradata.sh $Nbr
-
-if [ ! -d "$datadir/geth" ]; then
-	echo "Initializing genesis block"
-	geth --datadir $datadir init $genesis
-fi
-
-echo $datadir
-echo "Extra Arguments" $*
- $GETH \
-   --fast \
-   --identity "$dd" \
-   --datadir $datadir \
-   --nodiscover \
-   --rpcapi net,eth,web3,miner,personal \
-   --rpc \
-   --rpccorsdomain='*' \
-   --rpcport $rpcport \
-   --port $port \
-   --unlock 0 \
-   --password $password $* \

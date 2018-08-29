@@ -20,5 +20,5 @@ extraData='0x0000000000000000000000000000000000000000000000000000000000000000'$e
 
 cat genesis.json | jq --arg extraData "$extraData" '.extraData=$extraData' &> genesis2.json
 cat genesis2.json &> genesis.json
-
+# rm genesis2.json
 sleep 5

@@ -52,3 +52,32 @@ for ((i=0;i<N;++i)); do
   echo ./gethup.sh $dir $id $genesis password$id.sec $N --networkid $network_id $*
   ./gethup.sh $dir $id $genesis password$id.sec $N --networkid $network_id $* &
 done
+
+
+./extradata.sh $N
+
+for ((i=0;i<N;++i)); do
+  id=`printf "%02d" $i`
+  datadir=$dir/data/$id
+  if [ ! -d "$datadir/geth" ]; then
+	  echo "Initializing genesis block for "$id
+	  geth --datadir $datadir init $genesis
+  fi
+  port=303$id
+  rpcport=85$id
+  password=password$id.sec
+  echo $datadir
+  echo "Extra Arguments for "$id $*
+  $GETH \
+    --fast \
+    --identity "$dd" \
+    --datadir $datadir \
+    --nodiscover \
+    --rpcapi net,eth,web3,miner,personal \
+    --rpc \
+    --rpccorsdomain='*' \
+    --rpcport $rpcport \
+    --port $port \
+    --unlock 0 \
+    --password $password $* &
+done
