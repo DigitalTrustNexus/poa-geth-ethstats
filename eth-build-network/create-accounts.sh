@@ -4,11 +4,7 @@ root=$1
 shift
 dd=$1
 shift
-genesis=$1
-shift
 password=$1
-shift
-Nbr=$1
 shift
 
 GETH=`which geth`
@@ -17,8 +13,6 @@ datadir=$root/data/$dd
 log=$root/log/$dd.$datetag.log
 linklog=$root/log/$dd.current.log
 stablelog=$root/log/$dd.log
-port=303$dd
-rpcport=85$dd
 
 mkdir -p $root/data
 mkdir -p $root/log

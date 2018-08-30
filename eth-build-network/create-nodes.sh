@@ -16,6 +16,17 @@ genesis=genesis.json
 
 GETH=`which geth`
 
+for ((i=0;i<N;++i)); do
+  id=`printf "%02d" $i`
+  mkdir -p $dir/data/$id
+  echo "launching node $(expr $i + 1)/$N ---> tail-f $dir/log/$id.log"
+  echo $id > password$id.sec
+  echo ./create-accounts.sh $dir $id password$id.sec $*
+  ./create-accounts.sh $dir $id password$id.sec $*
+done
+
+./add-sealers-to-genesis.sh $N
+
 if [ ! -f $dir/nodes  ]; then
 
   echo "[" >> $dir/nodes
@@ -45,34 +56,20 @@ fi
 
 for ((i=0;i<N;++i)); do
   id=`printf "%02d" $i`
-  rm -rf $dir/data/$id/geth
-  mkdir -p $dir/data/$id
-  echo "launching node $(expr $i + 1)/$N ---> tail-f $dir/log/$id.log"
-  echo $id > password$id.sec
-  echo ./create-accounts.sh $dir $id $genesis password$id.sec $N --networkid $network_id $*
-  ./create-accounts.sh $dir $id $genesis password$id.sec $N --networkid $network_id $*
-done
 
-./add-sealers-to-genesis.sh $N
-
-for ((i=0;i<N;++i)); do
-  id=`printf "%02d" $i`
   datadir=$dir/data/$id
-  if [ ! -d "$datadir/geth" ]; then
-	  echo "Initializing genesis block for "$id
-	  geth --datadir $datadir init $genesis
-  fi
   port=303$id
   rpcport=85$id
   password=password$id.sec
-  echo $datadir
+  bootnodes=$(cat ~/Desktop/POA/eth-build-network/clusters/3301/nodes | tr [ '%' | tr ] '%' | tr '\n' '%' | tr '"' '%' | sed 's/\%//g')
+  echo $bootnodes
   echo "Extra Arguments for "$id $*
   $GETH \
-    --fast \
+    --syncmode full \
+    --bootnodes $bootnodes \
     --identity "$dd" \
     --datadir $datadir \
-    --nodiscover \
-    --rpcapi net,eth,web3,miner,personal \
+    --rpcapi admin,net,eth,web3,miner,personal \
     --rpc \
     --rpccorsdomain='*' \
     --rpcport $rpcport \
