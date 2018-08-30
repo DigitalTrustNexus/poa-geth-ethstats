@@ -6,11 +6,14 @@ N=$1
 cd ../eth-netstats
 WS_SECRET=hello npm start &
 
-#eth-build-network
+sleep $N #eth-build-network
 cd ../eth-build-network
-bash netstatconf.sh $N cluster http://localhost:3000 hello > ../eth-net-intelligence-api/app.json
+bash netstatconf.sh $N node http://localhost:3000 hello > ../eth-net-intelligence-api/app.json
 
-#eth-net-intelligence-api
+sleep $N #eth-net-intelligence-api
 cd ../eth-net-intelligence-api/
 pm2 start app.json
-pm2 monit
+
+#Shutdown
+# pm2 stop app.json
+# rm app.json
