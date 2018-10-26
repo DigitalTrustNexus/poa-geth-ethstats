@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pm2 delete ../eth-net-intelligence-api/app.json
+$(which pm2) delete ../eth-net-intelligence-api/app.json
 if [ -f "../eth-net-intelligence-api/app.json" ]; then
     rm ../eth-net-intelligence-api/app.json
 fi
