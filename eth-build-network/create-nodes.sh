@@ -61,7 +61,7 @@ for ((i=0;i<N;++i)); do
   port=303$id
   rpcport=85$id
   password=password$id.sec
-  bootnodes=$(cat ~/Desktop/POA/eth-build-network/clusters/3301/nodes | tr [ '%' | tr ] '%' | tr '\n' '%' | tr '"' '%' | sed 's/\%//g')
+  bootnodes=$(cat $PWD/clusters/3301/nodes | tr [ '%' | tr ] '%' | tr '\n' '%' | tr '"' '%' | sed 's/\%//g')
   echo $bootnodes
   echo "Extra Arguments for "$id $*
   $GETH \
